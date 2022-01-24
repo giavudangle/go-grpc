@@ -1,8 +1,8 @@
 syntax = "proto3";
+package giavudangle.grpc;
 
-package giavudangle.protobuf;
+option go_package = ".;pb";
 
-option go_package="giavudangle.protobuf";
 option java_package="com.giavudangle.protobuf";
 option java_multiple_files = true;
 

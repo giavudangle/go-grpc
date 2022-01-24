@@ -1,8 +1,8 @@
 syntax ="proto3";
+package giavudangle.grpc;
 
-package giavudangle.protobuf;
+option go_package = ".;pb";
 
-option go_package="giavudangle.protobuf";
 option java_package="com.giavudangle.protobuf";
 option java_multiple_files = true;
 import "processor_message.proto";
@@ -18,7 +18,7 @@ message Laptop {
     string brand = 2;
     string name = 3;
     CPU cpu = 4 ;
-    Memory memory = 5;
+    Memory ram = 5;
     repeated GPU gpus = 6;
     repeated Storage storages = 7;
     Screen screen = 8;
