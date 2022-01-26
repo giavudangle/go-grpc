@@ -1,11 +1,17 @@
 package sample
 
 import (
+	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/giavudangle/go-grpc/pb"
 	"github.com/google/uuid"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func randomKeyboardLayout() pb.Keyboard_Layout {
 	switch rand.Intn(3) {
@@ -59,10 +65,10 @@ func randomLaptopBrand() string {
 }
 
 func randomLaptopName(brand string) string {
+	fmt.Print(brand)
 	switch brand {
 	case "Apple":
 		return randomStringFromSet("Macbook Air", "Macbook Pro", "IMac")
-
 	case "Dell":
 		return randomStringFromSet("Latitude", "XPS", "Vostro")
 	default:
@@ -78,7 +84,8 @@ func randomCPUName(brand string) string {
 			"Core i7 Extreme Edition",
 			"Core i7",
 		)
-	} else if brand == "AMD" {
+	}
+	if brand == "AMD" {
 		return randomStringFromSet(
 			"Ryzen 7 Pro",
 			"Ryzen 9 Pro",
