@@ -1,14 +1,15 @@
 syntax = "proto3";
 
-option java_package="com.giavudangle.protobuf";
-option java_multiple_files = true;
+import "memory_message.proto";
+
 package giavudangle.grpc;
 
+option java_package="com.giavudangle.protobuf";
+option java_multiple_files = true;
 option go_package = ".;pb";
 
 
 
-import "memory_message.proto";
 
 message CPU {
     string brand = 1;

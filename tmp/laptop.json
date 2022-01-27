@@ -1,1 +1,62 @@
-{"id":"1b5cb681-b1d4-499d-b58c-9ac6e1cdc2e0","brand":"Dell","name":"Vostro","cpu":{"brand":"AMD","name":"Ryzen 9 Pro","numberCores":7,"numberThreads":11,"minGhz":3.13545985877523,"maxGhz":5.916035611688581},"ram":{"value":"25","unit":5},"gpus":[{"brand":"AMD","name":"AMD 7200K","minGhz":1.4774564868414375,"maxGhz":3.1122576348247954,"memory":{"value":"5","unit":5}}],"storages":[{"driver":2,"memory":{"value":"969","unit":5}},{"driver":1,"memory":{"value":"4","unit":6}}],"screen":{"sizeInch":14.074708,"resolution":{"width":3315,"height":1865},"panel":2,"multitouch":true},"keyboard":{"layout":3,"backlit":false},"weightKg":1.923538677433088,"priceUsd":1816.5771309230227,"releaseYear":2021,"updatedAt":"2022-01-26T17:05:29.790662Z"}
+{
+    "id": "1b5cb681-b1d4-499d-b58c-9ac6e1cdc2e0",
+    "brand": "Dell",
+    "name": "Vostro",
+    "cpu": {
+        "brand": "AMD",
+        "name": "Ryzen 9 Pro",
+        "numberCores": 7,
+        "numberThreads": 11,
+        "minGhz": 3.13545985877523,
+        "maxGhz": 5.916035611688581
+    },
+    "ram": {
+        "value": "25",
+        "unit": 5
+    },
+    "gpus": [
+        {
+            "brand": "AMD",
+            "name": "AMD 7200K",
+            "minGhz": 1.4774564868414375,
+            "maxGhz": 3.1122576348247954,
+            "memory": {
+                "value": "5",
+                "unit": 5
+            }
+        }
+    ],
+    "storages": [
+        {
+            "driver": 2,
+            "memory": {
+                "value": "969",
+                "unit": 5
+            }
+        },
+        {
+            "driver": 1,
+            "memory": {
+                "value": "4",
+                "unit": 6
+            }
+        }
+    ],
+    "screen": {
+        "sizeInch": 14.074708,
+        "resolution": {
+            "width": 3315,
+            "height": 1865
+        },
+        "panel": 2,
+        "multitouch": true
+    },
+    "keyboard": {
+        "layout": 3,
+        "backlit": false
+    },
+    "weightKg": 1.923538677433088,
+    "priceUsd": 1816.5771309230227,
+    "releaseYear": 2021,
+    "updatedAt": "2022-01-26T17:05:29.790662Z"
+}

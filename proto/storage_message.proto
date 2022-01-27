@@ -1,13 +1,14 @@
 syntax = "proto3";
+package giavudangle.grpc;
+
+import "memory_message.proto";
+
 
 option java_package="com.giavudangle.protobuf";
 option java_multiple_files = true;
-package giavudangle.grpc;
-
 option go_package = ".;pb";
 
 
-import "memory_message.proto";
 
 message Storage {
     enum Driver {

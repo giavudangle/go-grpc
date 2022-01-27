@@ -3,7 +3,6 @@ syntax="proto3";
 package giavudangle.grpc;
 
 option go_package = ".;pb";
-
 option java_package="com.giavudangle.protobuf";
 option java_multiple_files = true;
 
