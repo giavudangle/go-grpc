@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"log"
 
 	"github.com/giavudangle/go-grpc/pb"
@@ -11,31 +12,51 @@ import (
 )
 
 type LaptopServer struct {
+	Store LaptopStore
 }
 
-func NewLaptopServer() *LaptopServer {
-	return &LaptopServer{}
+func NewLaptopServer(store LaptopStore) *LaptopServer {
+	return &LaptopServer{
+		Store: store,
+	}
 }
 
 func (server *LaptopServer) CreateLaptop(
 	ctx context.Context,
 	req *pb.CreateLaptopRequest,
-) (*pb.CreateLaptopRequest, error) {
-	laptop := req.Laptop
-	log.Printf("receive a create-laptop request with id: %w", laptop.Id)
+) (*pb.CreateLaptopResponse, error) {
+	laptop := req.GetLaptop()
+	log.Printf("receive a create-laptop request with id: %s", laptop.Id)
 	if len(laptop.Id) > 0 {
 		_, err := uuid.Parse(laptop.Id)
 		if err != nil {
 			return nil,
-				status.Error(codes.InvalidArgument, "Laptop ID is not a valid UUID %v", err)
+				status.Errorf(codes.InvalidArgument, "Laptop ID is not a valid UUID %s", err)
 		}
 	} else {
 		id, err := uuid.NewRandom()
 		if err != nil {
-			return nil, status.Error(codes.Internal, "cannot generate a new laptop ID: %w", err)
+			return nil, status.Errorf(codes.Internal, "cannot generate a new laptop ID: %s", err)
 		}
 
 		laptop.Id = id.String()
 	}
 
+	err := server.Store.Save(laptop)
+
+	if err != nil {
+		code := codes.Internal
+		if errors.Is(err, ErrAlreadyExists) {
+			code = codes.AlreadyExists
+		}
+		return nil, status.Errorf(code, "cannot save laptop to the store: %s", err)
+	}
+
+	log.Printf("saved laptop with id: %s", laptop.Id)
+
+	res := &pb.CreateLaptopResponse{
+		Id: laptop.Id,
+	}
+
+	return res, nil
 }
