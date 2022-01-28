@@ -54,7 +54,7 @@ func (store *InMemoryLaptopStore) Find(id string) (*pb.Laptop, error) {
 
 	laptop := store.data[id]
 
-	if laptop != nil {
+	if laptop == nil {
 		return nil, nil
 	}
 

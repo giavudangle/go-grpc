@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"time"
 
 	"github.com/giavudangle/go-grpc/pb"
 	"github.com/google/uuid"
@@ -40,6 +41,18 @@ func (server *LaptopServer) CreateLaptop(
 		}
 
 		laptop.Id = id.String()
+	}
+
+	time.Sleep(6 * time.Second)
+
+	if ctx.Err() == context.Canceled {
+		log.Print("request is canceled")
+		return nil, status.Error(codes.Canceled, "request is canceled")
+	}
+
+	if ctx.Err() == context.DeadlineExceeded {
+		log.Print("deadline is excedeed")
+		return nil, status.Error(codes.DeadlineExceeded, "timeout is exceeded")
 	}
 
 	err := server.Store.Save(laptop)
