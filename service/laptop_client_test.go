@@ -54,8 +54,8 @@ func TestClientSearchLaptop(t *testing.T) {
 		},
 	}
 
-	store := service.NewInMemoryLaptopStore()
-	expectedIDs
+	// store := service.NewInMemoryLaptopStore()
+	// expectedIDs
 }
 
 func startTestLaptopServer(t *testing.T, laptopStore service.LaptopStore) string {

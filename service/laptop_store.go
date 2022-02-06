@@ -1,9 +1,12 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"log"
 	"sync"
+	"time"
 
 	"github.com/giavudangle/go-grpc/pb"
 	"github.com/jinzhu/copier"
@@ -14,7 +17,7 @@ var ErrAlreadyExists = errors.New("record already exists")
 type LaptopStore interface {
 	Save(laptop *pb.Laptop) error
 	Find(id string) (*pb.Laptop, error)
-	Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error
+	Search(ctx context.Context, filter *pb.Filter, found func(laptop *pb.Laptop) error) error
 }
 
 type InMemoryLaptopStore struct {
@@ -60,11 +63,25 @@ func (store *InMemoryLaptopStore) Find(id string) (*pb.Laptop, error) {
 	return deepClone(laptop)
 }
 
-func (store *InMemoryLaptopStore) Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error {
+func (store *InMemoryLaptopStore) Search(
+	ctx context.Context,
+	filter *pb.Filter,
+	found func(laptop *pb.Laptop) error) error {
+
 	store.mutex.RLock()
 	defer store.mutex.RUnlock()
 
 	for _, laptop := range store.data {
+		// Heavy processing timeout
+		time.Sleep(time.Second)
+		log.Print("checking laptop id: ", laptop.GetId())
+
+		if ctx.Err() == context.Canceled ||
+			ctx.Err() == context.DeadlineExceeded {
+			log.Print("context is cancelled")
+			return errors.New("Context is cancelled")
+		}
+
 		if isQualified(filter, laptop) {
 			// Deep copy before calling callback function
 			other, err := deepClone(laptop)

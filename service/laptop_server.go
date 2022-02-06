@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"log"
-	"time"
 
 	"github.com/giavudangle/go-grpc/pb"
 	"github.com/google/uuid"
@@ -14,6 +13,7 @@ import (
 
 type LaptopServer struct {
 	Store LaptopStore
+	//pb.UnimplementedLaptopServiceServer
 }
 
 func NewLaptopServer(store LaptopStore) *LaptopServer {
@@ -43,7 +43,8 @@ func (server *LaptopServer) CreateLaptop(
 		laptop.Id = id.String()
 	}
 
-	time.Sleep(6 * time.Second)
+	// Some heavy processing deadline timeout
+	//time.Sleep(6 * time.Second)
 
 	if ctx.Err() == context.Canceled {
 		log.Print("request is canceled")
@@ -81,7 +82,9 @@ func (server *LaptopServer) SearchLaptop(
 	filter := req.GetFilter()
 	log.Print("receive a search-laptop request with filter: %w", filter)
 
-	err := server.Store.Search(filter,
+	err := server.Store.Search(
+		stream.Context(),
+		filter,
 		func(laptop *pb.Laptop) error {
 			res := &pb.SearchLaptopResponse{
 				Laptop: laptop,

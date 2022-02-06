@@ -40,7 +40,7 @@ func createLaptop(laptopClient pb.LaptopServiceClient) {
 	log.Print("created laptop with id: %w", res.Id)
 }
 
-func searchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
+func SearchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
 	log.Print("search filter: ", filter)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -105,6 +105,6 @@ func main() {
 		},
 	}
 
-	searchLaptop(laptopClient, filter)
+	SearchLaptop(laptopClient, filter)
 
 }
