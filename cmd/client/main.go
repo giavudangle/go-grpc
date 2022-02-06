@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"time"
 
@@ -15,20 +16,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func main() {
-	fmt.Println("client")
-	serverAddress := flag.String("address", "", "the server address")
-	flag.Parse()
-	log.Printf("dial server %s", *serverAddress)
-
-	conn, err := grpc.Dial(*serverAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-	if err != nil {
-		log.Fatal("cannot dial server: ", err)
-	}
-
-	laptopClient := pb.NewLaptopServiceClient(conn)
-
+func createLaptop(laptopClient pb.LaptopServiceClient) {
 	laptop := sample.NewLaptop()
 	laptop.Id = "0e434306-d2aa-4c4e-98b5-82e2a6643f34"
 	req := &pb.CreateLaptopRequest{
@@ -50,4 +38,73 @@ func main() {
 		return
 	}
 	log.Print("created laptop with id: %w", res.Id)
+}
+
+func searchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
+	log.Print("search filter: ", filter)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	req := &pb.SearchLaptopRequest{
+		Filter: filter,
+	}
+	stream, err := laptopClient.SearchLaptop(ctx, req)
+
+	if err != nil {
+		log.Fatal("cannot search laptop: ", err)
+	}
+
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			log.Fatal("cannot receive response: ", err)
+		}
+		laptop := res.GetLaptop()
+
+		// Print laptop information
+		log.Print("===Laptop Information===\n")
+		log.Print("ID: ", laptop.GetId()+"\n")
+		log.Print("Brand: ", laptop.GetBrand()+"\n")
+		log.Print("Name: ", laptop.GetName()+"\n")
+		log.Print("CPU Cores: ", laptop.GetCpu().GetNumberCores(), "\n")
+		log.Print("CPU MinGhz: ", laptop.GetCpu().GetMinGhz(), "\n")
+		log.Print("RAM: ", laptop.GetRam().GetValue(), laptop.GetRam().GetUnit(), "\n")
+		log.Print("Price: ", laptop.GetPriceUsd(), " USD")
+
+	}
+}
+
+func main() {
+	fmt.Println("client")
+	serverAddress := flag.String("address", "", "the server address")
+	flag.Parse()
+	log.Printf("dial server %s", *serverAddress)
+
+	conn, err := grpc.Dial(*serverAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		log.Fatal("cannot dial server: ", err)
+	}
+
+	laptopClient := pb.NewLaptopServiceClient(conn)
+
+	for i := 0; i < 10; i++ {
+		createLaptop(laptopClient)
+	}
+
+	filter := &pb.Filter{
+		MaxPriceUsd: 3000,
+		MinCpuCores: 4,
+		MinCpuGhz:   2.5,
+		MinRam: &pb.Memory{
+			Unit:  pb.Memory_GIGABYTE,
+			Value: 8,
+		},
+	}
+
+	searchLaptop(laptopClient, filter)
+
 }

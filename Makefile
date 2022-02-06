@@ -1,5 +1,5 @@
 gen:
-	protoc --proto_path=proto proto/*.proto  --go_out=:pb --go-grpc_out=:pb
+	protoc --proto_path=proto proto/*.proto --go_out=:pb --go-grpc_out=:pb
 clean:
 	rm pb/*.go
 server:
@@ -8,4 +8,6 @@ client:
 	go run cmd/client/main.go -address 0.0.0.0:8080
 test:
 	go test -cover -race ./...
+gen-embed:
+	protoc --proto_path=proto proto/*.proto --go-grpc_opt=require_unimplemented_servers=false --go_out=:pb --go-grpc_out=:pb
 

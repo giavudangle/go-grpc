@@ -72,15 +72,14 @@ func (x *laptopServiceSearchLaptopClient) Recv() (*SearchLaptopResponse, error) 
 }
 
 // LaptopServiceServer is the server API for LaptopService service.
-// All implementations must embed UnimplementedLaptopServiceServer
+// All implementations should embed UnimplementedLaptopServiceServer
 // for forward compatibility
 type LaptopServiceServer interface {
 	CreateLaptop(context.Context, *CreateLaptopRequest) (*CreateLaptopResponse, error)
 	SearchLaptop(*SearchLaptopRequest, LaptopService_SearchLaptopServer) error
-	mustEmbedUnimplementedLaptopServiceServer()
 }
 
-// UnimplementedLaptopServiceServer must be embedded to have forward compatible implementations.
+// UnimplementedLaptopServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedLaptopServiceServer struct {
 }
 
@@ -90,7 +89,6 @@ func (UnimplementedLaptopServiceServer) CreateLaptop(context.Context, *CreateLap
 func (UnimplementedLaptopServiceServer) SearchLaptop(*SearchLaptopRequest, LaptopService_SearchLaptopServer) error {
 	return status.Errorf(codes.Unimplemented, "method SearchLaptop not implemented")
 }
-func (UnimplementedLaptopServiceServer) mustEmbedUnimplementedLaptopServiceServer() {}
 
 // UnsafeLaptopServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to LaptopServiceServer will
