@@ -30,7 +30,7 @@ func main() {
 	laptopClient := pb.NewLaptopServiceClient(conn)
 
 	laptop := sample.NewLaptop()
-	laptop.Id = "4b9811c9-5c0e-460b-9016-951f9051ab0e"
+	laptop.Id = "0e434306-d2aa-4c4e-98b5-82e2a6643f34"
 	req := &pb.CreateLaptopRequest{
 		Laptop: laptop,
 	}
@@ -49,5 +49,5 @@ func main() {
 		}
 		return
 	}
-	log.Print("created laptop with id: %s", res.Id)
+	log.Print("created laptop with id: %w", res.Id)
 }
