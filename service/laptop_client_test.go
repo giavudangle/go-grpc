@@ -41,6 +41,23 @@ func TestClientCreateLaptop(t *testing.T) {
 
 }
 
+func TestClientSearchLaptop(t *testing.T) {
+	t.Parallel()
+
+	filter := &pb.Filter{
+		MaxPriceUsd: 2000,
+		MinCpuCores: 4,
+		MinCpuGhz:   2.2,
+		MinRam: &pb.Memory{
+			Value: 8,
+			Unit:  pb.Memory_GIGABYTE,
+		},
+	}
+
+	store := service.NewInMemoryLaptopStore()
+	expectedIDs
+}
+
 func startTestLaptopServer(t *testing.T, laptopStore service.LaptopStore) string {
 	laptopServer := service.NewLaptopServer(laptopStore)
 
